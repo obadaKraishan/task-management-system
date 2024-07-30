@@ -1,4 +1,3 @@
-// routes/auth.js
 const express = require('express');
 const { check, validationResult } = require('express-validator');
 const authController = require('../controllers/authController');
