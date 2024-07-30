@@ -10,9 +10,10 @@ const routes: Routes = [
   { path: 'auth/login', component: LoginComponent },
   { path: 'auth/register', component: RegisterComponent },
   { path: 'projects', component: ProjectListComponent, canActivate: [AuthGuard] },
-  { path: '', component: WelcomeComponent },  // Set WelcomeComponent as default route
-  { path: '**', redirectTo: '' },  // Catch-all route
+  { path: '', component: WelcomeComponent },
+  { path: '**', redirectTo: '' },
 ];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
