@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ProjectService {
   private apiUrl = 'http://localhost:5002/api/projects';
@@ -14,9 +14,11 @@ export class ProjectService {
     return this.http.get<any[]>(this.apiUrl);
   }
 
+  createProject(project: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, project);
+  }
+
   deleteProject(projectId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${projectId}`);
   }
-
-  // Add more methods as needed for adding, updating projects
 }

@@ -1,39 +1,54 @@
-// controllers/projectController.js
-const express = require('express');
-const auth = require('../middleware/authMiddleware');
-const { check, validationResult } = require('express-validator');
 const Project = require('../models/Project');
+const Task = require('../models/Task');
 const User = require('../models/User');
 
-const router = express.Router();
+exports.createProject = async (req, res) => {
+  try {
+    const { title, description, duration, deadline, team, tasks } = req.body;
 
-// @route    POST api/projects
-// @desc     Create a project
-// @access   Private
-router.post(
-  '/',
-  [auth, [check('name', 'Name is required').not().isEmpty()]],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+    const project = new Project({
+      title,
+      description,
+      duration,
+      deadline,
+      team
+    });
+
+    const savedProject = await project.save();
+
+    // Add tasks to the project
+    if (tasks && tasks.length > 0) {
+      for (const taskData of tasks) {
+        const task = new Task({ ...taskData, project: savedProject._id });
+        await task.save();
+        savedProject.tasks.push(task._id);
+      }
+      await savedProject.save();
     }
 
-    try {
-      const newProject = new Project({
-        name: req.body.name,
-        description: req.body.description,
-        user: req.user.id,
-      });
-
-      const project = await newProject.save();
-
-      res.json(project);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server error');
-    }
+    res.status(201).json(savedProject);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating project' });
   }
-);
+};
 
-module.exports = router;
+exports.getProjects = async (req, res) => {
+  try {
+    const projects = await Project.find().populate('team tasks');
+    res.status(200).json(projects);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching projects' });
+  }
+};
+
+exports.getProject = async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id).populate('team tasks');
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+    res.status(200).json(project);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching project' });
+  }
+};
