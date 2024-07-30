@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const connectDB = require('./config/db');
 const cors = require('cors');
@@ -20,6 +19,9 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/projects', require('./routes/projectRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
 
-const PORT = process.env.PORT || 5000;
+// Root route
+app.get('/', (req, res) => res.send('API is running...'));
+
+const PORT = process.env.PORT || 5002;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

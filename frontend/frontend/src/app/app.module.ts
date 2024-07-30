@@ -10,9 +10,12 @@ import { SharedModule } from './shared/shared.module';
 import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, WelcomeComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -23,6 +26,8 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     SharedModule,
     ProjectsModule,
     TasksModule,
+    BrowserAnimationsModule, // Add this
+    MatSnackBarModule, // Add this
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
