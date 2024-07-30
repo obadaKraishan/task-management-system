@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { CreateUserComponent } from './create-user/create-user.component';
-
-
 
 @NgModule({
   declarations: [
@@ -11,7 +10,8 @@ import { CreateUserComponent } from './create-user/create-user.component';
     CreateUserComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule
   ]
 })
 export class UserModule { }
