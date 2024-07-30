@@ -1,7 +1,9 @@
+// src/app/projects/project-list/project-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from '../../core/services/project.service';
 import { AuthService } from '../../core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-project-list',
@@ -19,16 +21,34 @@ export class ProjectListComponent implements OnInit {
     team: [],
     tasks: []
   };
+  newUser: any = {
+    name: '',
+    email: '',
+    password: '',
+    phone: '',
+    role: '',
+    department: ''
+  };
+  isManagerOrTeamLeader: boolean = false;
 
   constructor(
     private projectService: ProjectService,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.loadProjects();
     this.loadUsers();
+    this.checkUserRole();
+  }
+
+  checkUserRole(): void {
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser) {
+      this.isManagerOrTeamLeader = currentUser.role === 'Manager' || currentUser.role === 'Team Leader';
+    }
   }
 
   loadProjects(): void {
@@ -95,6 +115,44 @@ export class ProjectListComponent implements OnInit {
       (error) => {
         console.error('Error deleting project', error);
         this.snackBar.open('Error deleting project.', 'Close', {
+          duration: 3000,
+        });
+      }
+    );
+  }
+
+  openAddUserModal(): void {
+    const addUserModal: any = document.getElementById('addUserModal');
+    addUserModal.classList.add('show');
+    addUserModal.style.display = 'block';
+  }
+
+  closeAddUserModal(): void {
+    const addUserModal: any = document.getElementById('addUserModal');
+    addUserModal.classList.remove('show');
+    addUserModal.style.display = 'none';
+  }
+
+  addUser(): void {
+    this.authService.createUser(
+      this.newUser.name,
+      this.newUser.email,
+      this.newUser.password,
+      this.newUser.phone,
+      this.newUser.role,
+      this.newUser.department
+    ).subscribe(
+      (user) => {
+        console.log('User added successfully', user);
+        this.closeAddUserModal();
+        this.loadUsers();
+        this.snackBar.open('User added successfully!', 'Close', {
+          duration: 3000,
+        });
+      },
+      (error) => {
+        console.error('Error adding user', error);
+        this.snackBar.open('Error adding user.', 'Close', {
           duration: 3000,
         });
       }

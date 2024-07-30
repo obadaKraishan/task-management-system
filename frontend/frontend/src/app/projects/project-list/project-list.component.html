@@ -1,6 +1,7 @@
+<!-- src/app/projects/project-list/project-list.component.html -->
 <div class="container mt-4">
   <h2>Projects</h2>
-  <button class="btn btn-primary mb-3" (click)="openAddProjectModal()">Add Project</button>
+  <button *ngIf="isManagerOrTeamLeader" class="btn btn-primary mb-3" (click)="openAddProjectModal()">Add Project</button>
   <div *ngIf="projects.length === 0">
     <p>No projects yet.</p>
   </div>
@@ -11,7 +12,7 @@
         class="list-group-item d-flex justify-content-between align-items-center"
       >
         {{ project.title }}
-        <button class="btn btn-danger btn-sm" (click)="deleteProject(project.id)">Delete</button>
+        <button *ngIf="isManagerOrTeamLeader" class="btn btn-danger btn-sm" (click)="deleteProject(project._id)">Delete</button>
       </li>
     </ul>
   </div>
@@ -44,7 +45,7 @@
             <div class="mb-3">
               <label for="projectTeam" class="form-label">Assign Team</label>
               <select multiple class="form-select" id="projectTeam" [(ngModel)]="newProject.team" name="projectTeam" required>
-                <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+                <option *ngFor="let user of users" [value]="user._id">{{ user.name }}</option>
               </select>
             </div>
             <div class="mb-3">
@@ -52,6 +53,58 @@
               <textarea class="form-control" id="projectTasks" [(ngModel)]="newProject.tasks" name="projectTasks" required></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Add Project</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add User Modal -->
+  <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+          <button type="button" class="btn-close" (click)="closeAddUserModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="addUser()">
+            <div class="mb-3">
+              <label for="userName" class="form-label">Name</label>
+              <input type="text" class="form-control" id="userName" [(ngModel)]="newUser.name" name="userName" required>
+            </div>
+            <div class="mb-3">
+              <label for="userEmail" class="form-label">Email</label>
+              <input type="email" class="form-control" id="userEmail" [(ngModel)]="newUser.email" name="userEmail" required>
+            </div>
+            <div class="mb-3">
+              <label for="userPassword" class="form-label">Password</label>
+              <input type="password" class="form-control" id="userPassword" [(ngModel)]="newUser.password" name="userPassword" required>
+            </div>
+            <div class="mb-3">
+              <label for="userPhone" class="form-label">Phone</label>
+              <input type="text" class="form-control" id="userPhone" [(ngModel)]="newUser.phone" name="userPhone" required>
+            </div>
+            <div class="mb-3">
+              <label for="userRole" class="form-label">Role</label>
+              <select class="form-select" id="userRole" [(ngModel)]="newUser.role" name="userRole" required>
+                <option value="" disabled>Select Role</option>
+                <option value="Employee">Employee</option>
+                <option value="Manager">Manager</option>
+                <option value="Team Leader">Team Leader</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="userDepartment" class="form-label">Department</label>
+              <select class="form-select" id="userDepartment" [(ngModel)]="newUser.department" name="userDepartment" required>
+                <option value="" disabled>Select Department</option>
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+                <option value="Finance">Finance</option>
+                <option value="Marketing">Marketing</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add User</button>
           </form>
         </div>
       </div>

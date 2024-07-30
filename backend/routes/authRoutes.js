@@ -20,6 +20,15 @@ router.post(
   authController.register
 );
 
+router.post(
+  '/login',
+  [
+    check('email', 'Please include a valid email').isEmail(),
+    check('password', 'Password is required').exists()
+  ],
+  authController.login
+);
+
 // @route   POST api/auth/create-user
 // @desc    Create user by manager
 // @access  Private (Manager Only)

@@ -21,10 +21,11 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem('token') || !!sessionStorage.getItem('token');
   }
 
   getUsers(): Observable<any[]> {
@@ -33,5 +34,13 @@ export class AuthService {
 
   createUser(name: string, email: string, password: string, phone: string, role: string, department: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/create-user`, { name, email, password, phone, role, department });
+  }
+
+  getCurrentUser(): any {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+    if (token) {
+      return JSON.parse(atob(token.split('.')[1])).user;
+    }
+    return null;
   }
 }
