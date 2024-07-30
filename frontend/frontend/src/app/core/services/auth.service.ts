@@ -21,7 +21,9 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('currentUser');
     sessionStorage.removeItem('token');
+    sessionStorage.removeItem('currentUser');
   }
 
   isLoggedIn(): boolean {
@@ -37,10 +39,7 @@ export class AuthService {
   }
 
   getCurrentUser(): any {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-    if (token) {
-      return JSON.parse(atob(token.split('.')[1])).user;
-    }
-    return null;
+    const user = localStorage.getItem('currentUser') || sessionStorage.getItem('currentUser');
+    return user ? JSON.parse(user) : null;
   }
 }

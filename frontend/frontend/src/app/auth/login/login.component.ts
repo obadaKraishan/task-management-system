@@ -22,8 +22,10 @@ export class LoginComponent {
         this.snackBar.open('Login successful!', 'Close', { duration: 3000 });
         if (this.rememberMe) {
           localStorage.setItem('token', res.token);
+          localStorage.setItem('currentUser', JSON.stringify(res.user));
         } else {
           sessionStorage.setItem('token', res.token);
+          sessionStorage.setItem('currentUser', JSON.stringify(res.user));
         }
         this.router.navigate(['/projects']);
       },

@@ -1,4 +1,5 @@
 // src/app/projects/project-list/project-list.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from '../../core/services/project.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -30,6 +31,7 @@ export class ProjectListComponent implements OnInit {
     department: ''
   };
   isManagerOrTeamLeader: boolean = false;
+  currentUser: any = {};
 
   constructor(
     private projectService: ProjectService,
@@ -39,14 +41,15 @@ export class ProjectListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.checkUserRole();
     this.loadProjects();
     this.loadUsers();
-    this.checkUserRole();
   }
 
   checkUserRole(): void {
     const currentUser = this.authService.getCurrentUser();
     if (currentUser) {
+      this.currentUser = currentUser;
       this.isManagerOrTeamLeader = currentUser.role === 'Manager' || currentUser.role === 'Team Leader';
     }
   }
@@ -83,6 +86,11 @@ export class ProjectListComponent implements OnInit {
     const addProjectModal: any = document.getElementById('addProjectModal');
     addProjectModal.classList.remove('show');
     addProjectModal.style.display = 'none';
+  }
+
+  openEditProjectModal(project: any): void {
+    console.log('Edit project:', project);
+    // Implement logic to open edit modal and populate it with project data
   }
 
   addProject(): void {
@@ -157,5 +165,15 @@ export class ProjectListComponent implements OnInit {
         });
       }
     );
+  }
+
+  editUser(user: any): void {
+    // Implement user edit functionality
+    console.log('Edit user:', user);
+  }
+
+  deleteUser(userId: string): void {
+    // Implement user delete functionality
+    console.log('Delete user with ID:', userId);
   }
 }

@@ -1,6 +1,11 @@
 <!-- src/app/projects/project-list/project-list.component.html -->
 <div class="container mt-4">
-  <h2>Projects</h2>
+  <h2>Welcome, {{ currentUser.name }}</h2>
+  <p>Email: {{ currentUser.email }}</p>
+  <p>Role: {{ currentUser.role }}</p>
+  <p>Department: {{ currentUser.department }}</p>
+
+  <h3>Projects</h3>
   <button *ngIf="isManagerOrTeamLeader" class="btn btn-primary mb-3" (click)="openAddProjectModal()">Add Project</button>
   <div *ngIf="projects.length === 0">
     <p>No projects yet.</p>
@@ -12,10 +17,47 @@
         class="list-group-item d-flex justify-content-between align-items-center"
       >
         {{ project.title }}
-        <button *ngIf="isManagerOrTeamLeader" class="btn btn-danger btn-sm" (click)="deleteProject(project._id)">Delete</button>
+        <div *ngIf="isManagerOrTeamLeader">
+          <button class="btn btn-warning btn-sm" (click)="openEditProjectModal(project)">Edit</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteProject(project._id)">Delete</button>
+        </div>
       </li>
     </ul>
   </div>
+
+  <h3>Users</h3>
+  <button *ngIf="isManagerOrTeamLeader" class="btn btn-primary mb-3" (click)="openAddUserModal()">Add User</button>
+  <div *ngIf="users.length === 0">
+    <p>No users found.</p>
+  </div>
+  <div *ngIf="users.length > 0">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Role</th>
+          <th>Department</th>
+          <th *ngIf="isManagerOrTeamLeader">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phone }}</td>
+          <td>{{ user.role }}</td>
+          <td>{{ user.department }}</td>
+          <td *ngIf="isManagerOrTeamLeader">
+            <button class="btn btn-sm btn-warning" (click)="editUser(user)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteUser(user._id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <!-- Add Project Modal -->
   <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
     <div class="modal-dialog">

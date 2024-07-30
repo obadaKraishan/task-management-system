@@ -1,12 +1,11 @@
+// routes/authRoutes.js
 const express = require('express');
 const { check, validationResult } = require('express-validator');
 const authController = require('../controllers/authController');
 
 const router = express.Router();
 
-// @route   POST api/auth/register
-// @desc    Register user
-// @access  Public
+// Register route
 router.post(
   '/register',
   [
@@ -20,18 +19,7 @@ router.post(
   authController.register
 );
 
-router.post(
-  '/login',
-  [
-    check('email', 'Please include a valid email').isEmail(),
-    check('password', 'Password is required').exists()
-  ],
-  authController.login
-);
-
-// @route   POST api/auth/create-user
-// @desc    Create user by manager
-// @access  Private (Manager Only)
+// Create user route
 router.post(
   '/create-user',
   [
@@ -43,6 +31,16 @@ router.post(
     check('department', 'Department is required').not().isEmpty()
   ],
   authController.createUser
+);
+
+// Login route
+router.post(
+  '/login',
+  [
+    check('email', 'Please include a valid email').isEmail(),
+    check('password', 'Password is required').exists()
+  ],
+  authController.login
 );
 
 module.exports = router;

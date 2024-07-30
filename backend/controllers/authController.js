@@ -36,7 +36,11 @@ exports.register = async (req, res) => {
 
     const payload = {
       user: {
-        id: user.id
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        department: user.department
       }
     };
 
@@ -46,7 +50,7 @@ exports.register = async (req, res) => {
       { expiresIn: 360000 },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ token, user: payload.user });
       }
     );
   } catch (err) {
@@ -87,7 +91,11 @@ exports.createUser = async (req, res) => {
 
     const payload = {
       user: {
-        id: user.id
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        department: user.department
       }
     };
 
@@ -97,7 +105,7 @@ exports.createUser = async (req, res) => {
       { expiresIn: 360000 },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ token, user: payload.user });
       }
     );
   } catch (err) {
@@ -106,7 +114,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-// controllers/authController.js
+// Login method
 exports.login = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -130,7 +138,11 @@ exports.login = async (req, res) => {
 
     const payload = {
       user: {
-        id: user.id
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        department: user.department
       }
     };
 
@@ -140,7 +152,7 @@ exports.login = async (req, res) => {
       { expiresIn: 360000 },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ token, user: payload.user });
       }
     );
   } catch (err) {
@@ -148,4 +160,3 @@ exports.login = async (req, res) => {
     res.status(500).send('Server error');
   }
 };
-
