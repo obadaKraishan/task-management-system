@@ -1,19 +1,60 @@
 <div class="container mt-4">
-    <h2>Projects</h2>
-    <button class="btn btn-primary mb-3" (click)="addProject()">Add Project</button>
-    <div *ngIf="projects.length === 0">
-      <p>No projects yet.</p>
-    </div>
-    <div *ngIf="projects.length > 0">
-      <ul class="list-group">
-        <li
-          *ngFor="let project of projects"
-          class="list-group-item d-flex justify-content-between align-items-center"
-        >
-          {{ project.name }}
-          <button class="btn btn-danger btn-sm" (click)="deleteProject(project.id)">Delete</button>
-        </li>
-      </ul>
+  <h2>Projects</h2>
+  <button class="btn btn-primary mb-3" (click)="openAddProjectModal()">Add Project</button>
+  <div *ngIf="projects.length === 0">
+    <p>No projects yet.</p>
+  </div>
+  <div *ngIf="projects.length > 0">
+    <ul class="list-group">
+      <li
+        *ngFor="let project of projects"
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        {{ project.title }}
+        <button class="btn btn-danger btn-sm" (click)="deleteProject(project.id)">Delete</button>
+      </li>
+    </ul>
+  </div>
+  <!-- Add Project Modal -->
+  <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addProjectModalLabel">Add Project</h5>
+          <button type="button" class="btn-close" (click)="closeAddProjectModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="addProject()">
+            <div class="mb-3">
+              <label for="projectTitle" class="form-label">Title</label>
+              <input type="text" class="form-control" id="projectTitle" [(ngModel)]="newProject.title" name="projectTitle" required>
+            </div>
+            <div class="mb-3">
+              <label for="projectDescription" class="form-label">Description</label>
+              <textarea class="form-control" id="projectDescription" [(ngModel)]="newProject.description" name="projectDescription" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="projectDuration" class="form-label">Duration (days)</label>
+              <input type="number" class="form-control" id="projectDuration" [(ngModel)]="newProject.duration" name="projectDuration" required>
+            </div>
+            <div class="mb-3">
+              <label for="projectDeadline" class="form-label">Deadline</label>
+              <input type="date" class="form-control" id="projectDeadline" [(ngModel)]="newProject.deadline" name="projectDeadline" required>
+            </div>
+            <div class="mb-3">
+              <label for="projectTeam" class="form-label">Assign Team</label>
+              <select multiple class="form-select" id="projectTeam" [(ngModel)]="newProject.team" name="projectTeam" required>
+                <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="projectTasks" class="form-label">Tasks</label>
+              <textarea class="form-control" id="projectTasks" [(ngModel)]="newProject.tasks" name="projectTasks" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Project</button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
-  
+</div>
